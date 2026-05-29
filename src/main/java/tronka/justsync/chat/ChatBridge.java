@@ -78,13 +78,13 @@ public class ChatBridge extends ListenerAdapter {
             mode = SendType.DEFAULT;
         }
 
-        String message = applyReplacements(format.format, payload.replacements());
+        String message = applyReplacements(format.format, payload.replacements(), true);
         if (message == null || message.isBlank()) {
             // Discord does not accept empty messages
             return;
         }
 
-        String customName = applyReplacements(format.customName, payload.replacements());
+        String customName = applyReplacements(format.customName, payload.replacements(), false);
         if ((customName == null || customName.isBlank())
                 && (mode == SendType.WEBHOOK || mode == SendType.EMBED)) {
             customName = this.integration.getGuild().getSelfMember().getEffectiveName();
@@ -125,7 +125,7 @@ public class ChatBridge extends ListenerAdapter {
         this.messageDispatcher = dispatcher;
     }
 
-    private String applyReplacements(String message, Map<String, String> replacementsOriginal) {
+    private String applyReplacements(String message, Map<String, String> replacementsOriginal, boolean escapeUser) {
         if (message == null || message.isBlank()) {
             return message;
         }
@@ -136,6 +136,9 @@ public class ChatBridge extends ListenerAdapter {
 
         Map<String, String> replacements = new HashMap<>(replacementsOriginal);
         replacements.remove("%msg%");
+        if (escapeUser && replacements.containsKey("%user%")) {
+            replacements.put("%user%", Utils.escapeUnderscores(replacements.get("%user%")));
+        }
 
         StringBuilder builder = new StringBuilder(message);
         for (Entry<String, String> entry : replacements.entrySet()) {

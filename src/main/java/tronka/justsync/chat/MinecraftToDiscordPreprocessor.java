@@ -80,7 +80,7 @@ public class MinecraftToDiscordPreprocessor {
         if (message.equals("death.attack.badRespawnPoint")) {
             message = "%s was killed by [Intentional Mod Design]".formatted(payload.player().getName().getString());
         }
-        this.invokeMessageEvent(Map.of("%msg%", message), payload.player(), MessageType.DEATH);
+        this.invokeMessageEvent(Map.of("%msg%", Utils.escapeUnderscores(message)), payload.player(), MessageType.DEATH);
     }
 
     public void onPlayerJoin(ServerPlayer player) {
@@ -115,7 +115,7 @@ public class MinecraftToDiscordPreprocessor {
             message = data;
         }
         Map<String, String> replacements = Map.of(
-                "%user%", Utils.escapeUnderscores(source.getTextName()),
+                "%user%", source.getTextName(),
                 "%msg%", this.preProcessMessage(message, sender)
         );
         this.invokeMessageEvent(replacements, sender, MessageType.COMMAND_SAY);
@@ -134,7 +134,7 @@ public class MinecraftToDiscordPreprocessor {
 
     private void invokeMessageEvent(Map<String, String> replacements, ServerPlayer player, MessageType type) {
         Map<String, String> map = new HashMap<>();
-        map.put("%user%", player != null ? Utils.escapeUnderscores(player.getName().getString()) : "Server");
+        map.put("%user%", player != null ? player.getName().getString() : "Server");
         map.putAll(replacements);
         ChatEvents.MINECRAFT_TO_DISCORD_CHAT_MESSAGE.invoke(new MinecraftToDiscordMessagePayload(map, player, type));
     }
