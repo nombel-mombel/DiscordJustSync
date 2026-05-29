@@ -22,7 +22,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: v22.2.0
+          node-version: lts/*
       - name: Install commitlint
         run: yarn add commitlint@latest conventional-changelog-conventionalcommits @commitlint/config-conventional
       - name: Validate current commit (last commit) with commitlint
