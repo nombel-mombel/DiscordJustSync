@@ -62,7 +62,7 @@ shadowJar {
     relocate 'org.intellij', 'dcshadow.org.intellij'
     relocate 'org.jetbrains', 'dcshadow.org.jetbrains'
     relocate 'com.fasterxml', 'dcshadow.com.fasterxml'
-    relocate "com.moandjiezana", "dcshadow.com.moandjiezana"
+//    relocate "com.moandjiezana", "dcshadow.com.moandjiezana"
     relocate "javax.annotation", "dcshadow.javax.annotation"
     relocate "kotlin", "dcshadow.kotlin"
     relocate "com.google.gson", "dcshadow.com.google.gson"
