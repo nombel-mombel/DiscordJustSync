@@ -27,7 +27,12 @@ public class RichPresenceUpdater {
                     .count();
         }
         this.updateRichPresence();
-        this.integration.getJda().getPresence().setStatus(OnlineStatus.ONLINE);
+        if (!config.showPlayerCountStatus) {
+            this.integration.getJda().getPresence().setActivity(null);
+        }
+        if (!config.showAsIdle) {
+            this.integration.getJda().getPresence().setStatus(OnlineStatus.ONLINE);
+        }
     }
 
     private void onPlayerJoin(ServerPlayer player) {
