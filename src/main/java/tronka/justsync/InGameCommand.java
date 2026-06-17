@@ -70,7 +70,7 @@ public class InGameCommand {
                 .stream().map(CompatUtil.Profile::wrap).toList();
         Collection<String> lines = new ArrayList<>();
         for (CompatUtil.Profile profile : profiles) {
-            Optional<PlayerLink> optionalLink = this.integration.getLinkManager().getDataOf(profile.uuid());
+            Optional<PlayerLink> optionalLink = this.integration.getLinkManager().getDataOf(profile.id());
             if (optionalLink.isEmpty()) {
                 lines.add("No records for " + profile.name());
             } else {
@@ -170,7 +170,7 @@ public class InGameCommand {
                 .stream().map(CompatUtil.Profile::wrap).toList();
         int count = 0;
         for (CompatUtil.Profile profile : profiles) {
-            if (this.integration.getLinkManager().unlinkPlayer(profile.uuid())) {
+            if (this.integration.getLinkManager().unlinkPlayer(profile.id())) {
                 count++;
             }
         }

@@ -142,7 +142,7 @@ public class LinkManager {
             return;
         }
 
-        Optional<Member> member = this.getDiscordOf(payload.getProfile().uuid());
+        Optional<Member> member = this.getDiscordOf(payload.getProfile().id());
         if (member.isEmpty()) {
             String code = this.generateLinkCode(payload.getProfile());
             payload.setCanceled(this.integration.getConfig().kickMessages.kickLinkCode.formatted(code));
@@ -251,7 +251,7 @@ public class LinkManager {
         do {
             code = String.valueOf(RANDOM.nextInt(100000, 1000000)); // 6-digit code
         } while (this.linkRequests.containsKey(code));
-        this.linkRequests.put(code, new LinkRequest(profile.uuid(), profile.name(), expiryTime));
+        this.linkRequests.put(code, new LinkRequest(profile.id(), profile.name(), expiryTime));
         return code;
     }
 
