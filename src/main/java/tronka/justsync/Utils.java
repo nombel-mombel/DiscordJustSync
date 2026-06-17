@@ -126,9 +126,9 @@ public final class Utils {
         return /*? if >= 1.21.9 {*/ result.profile().name() /*?} else {*/ /*result.profile().getName() *//*?}*/;
     }
 
-    public static GameProfile fetchProfile(String name) {
+    public static CompatUtil.Profile fetchProfile(String name) {
         if (JustSyncApplication.getInstance().getFloodgateIntegration().isFloodGateName(name)) {
-            return JustSyncApplication.getInstance().getFloodgateIntegration().getGameProfileFor(name);
+            return CompatUtil.Profile.wrap(JustSyncApplication.getInstance().getFloodgateIntegration().getGameProfileFor(name));
         }
         try {
             return fetchProfileData("https://api.mojang.com/users/profiles/minecraft/" + name);
@@ -140,7 +140,7 @@ public final class Utils {
         }
     }
 
-    private static GameProfile fetchProfileData(String urlLink) throws IOException {
+    private static CompatUtil.Profile fetchProfileData(String urlLink) throws IOException {
         URL url = URI.create(urlLink).toURL();
         URLConnection connection = url.openConnection();
         connection.addRequestProperty("User-Agent", "DiscordJS");
@@ -152,10 +152,11 @@ public final class Utils {
         if (data.endsWith("\"ERR\"}")) {
             return null;
         }
+
         // fix uuid format
         String fixed = data.replaceFirst(
             "\"(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)\"", "$1-$2-$3-$4-$5");
-        return gson.fromJson(fixed, GameProfile.class);
+        return gson.fromJson(fixed, CompatUtil.Profile.class);
     }
 
     public static boolean startsWithAny(String string, List<String> starts) {

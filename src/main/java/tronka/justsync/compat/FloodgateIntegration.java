@@ -36,7 +36,7 @@ public class FloodgateIntegration {
             return;
         }
 
-        UUID uuid = payload.getProfile().uuid();
+        UUID uuid = payload.getProfile().id();
         if (!this.canJoinMixedAccountType(uuid)) {
             payload.setCanceled(this.integration.getConfig().integrations.floodgate.joiningMixedAccountTypesKickMessage);
         }

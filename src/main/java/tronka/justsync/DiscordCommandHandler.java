@@ -1,7 +1,5 @@
 package tronka.justsync;
 
-import com.mojang.authlib.GameProfile;
-
 import java.util.Objects;
 import java.util.List;
 import java.util.Optional;
@@ -139,7 +137,7 @@ public class DiscordCommandHandler extends ListenerAdapter {
         if (minecraftName != null) {
             if (PermissionUtil.checkPermission(event.getMember(), Permission.MODERATE_MEMBERS)) {
                 event.deferReply().setEphemeral(true).queue();
-                GameProfile profile = Utils.fetchProfile(minecraftName);
+                CompatUtil.Profile profile = Utils.fetchProfile(minecraftName);
                 this.linkingWithPlayer(event.getSubcommandName(), event.getHook(), profile);
                 return;
             } else {
@@ -198,14 +196,13 @@ public class DiscordCommandHandler extends ListenerAdapter {
     }
 
     // run with checked permissions
-    private void linkingWithPlayer(String subCommand, InteractionHook hook, GameProfile profile) {
+    private void linkingWithPlayer(String subCommand, InteractionHook hook, CompatUtil.Profile profile) {
         if (profile == null) {
             hook.editOriginal("Could not find a player with that name").queue();
             return;
         }
-        UUID uuid = profile./*? if >= 1.21.9 {*/ id() /*?} else {*/ /*getId() *//*?}*/;
-        String minecraftName = profile./*? if >= 1.21.9 {*/ name() /*?} else {*/ /*getName() *//*?}*/;
-        Optional<PlayerLink> data = this.integration.getLinkManager().getDataOf(uuid);
+
+        Optional<PlayerLink> data = this.integration.getLinkManager().getDataOf(profile.id());
         if (data.isEmpty()) {
             hook.editOriginal("Could not find a linked account").queue();
             return;
@@ -213,16 +210,16 @@ public class DiscordCommandHandler extends ListenerAdapter {
         if (Objects.equals(subCommand, "get")) {
             Optional<Member> member = this.integration.getLinkManager().getDiscordOf(data.get());
             if (member.isPresent()) {
-                hook.editOriginal(minecraftName + " is linked to " + member.get().getAsMention()).queue();
+                hook.editOriginal(profile.name() + " is linked to " + member.get().getAsMention()).queue();
             } else {
                 hook.editOriginal("Could not find a linked discord account").queue();
             }
         } else if (Objects.equals(subCommand, "unlink")) {
-            if (data.get().getPlayerName().equalsIgnoreCase(minecraftName)) {
+            if (data.get().getPlayerName().equalsIgnoreCase(profile.name())) {
                 this.integration.getLinkManager().unlinkPlayer(data.get());
             } else {
                 UUID altUuid = data.get().getAlts().stream()
-                    .filter((alt) -> alt.getName().equalsIgnoreCase(minecraftName))
+                    .filter((alt) -> alt.getName().equalsIgnoreCase(profile.name()))
                     .findFirst().get().getId();
                 this.integration.getLinkManager().unlinkAlt(data.get(), altUuid);
             }
