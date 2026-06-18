@@ -67,7 +67,7 @@ jobs:
       - name: generate versions json and set matrix 
         id: set-matrix
         run: |
-          echo -n "versions=$(./.github/scripts/generate-versions)" >> "$GITHUB_OUTPUT"
+          echo -n "versions=$(./.github/scripts/generate-versions.py)" >> "$GITHUB_OUTPUT"
       - name: persist json
         uses: actions/upload-artifact@v4
         with:
