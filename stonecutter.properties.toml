@@ -1,0 +1,69 @@
+mod.id = "discord_justsync"
+mod.name = "Discord Just Sync"
+mod.group = "de.tronka"
+mod.version = "0.1.0"
+mod.channel_tag = "-alpha.2"
+mod.description = ""
+mod.authors = ["nombel_mombel", "GoldenKoopa"]
+mod.contributors = []
+mod.inception_year = "2024"
+mod.license.name = "MIT"
+mod.license.url = "https://opensource.org/licenses/MIT"
+mod.license.dist = "repo"
+mod.sources_url = "https://github.com/rotgruengelb/stonecutter-mod-template"
+mod.homepage_url = "https://github.com/rotgruengelb/stonecutter-mod-template"
+mod.issues_url = "https://github.com/rotgruengelb/stonecutter-mod-template/issues"
+mod.discord_url = "https://discord.gg/aunYJB4wz9"
+deps.jda = "5.3.2"
+deps.webhooks = "0.8.4"
+deps.toml4j = "51ef9d6"
+deps.luckperms-api = "5.4"
+deps.floodgate-api = "2.2.4-SNAPSHOT"
+[[mod.pom.developers]]
+id = "authorname"
+name = "AuthorName"
+url = "https://github.com/ghost"
+[[mod.pom.developers]]
+id = "anotherauthorname"
+name = "AnotherAuthorName"
+url = "https://github.com/ghost"
+
+[fabric]
+deps.fabric-loader = "0.19.2"
+
+[fabric."1.21.4"]
+deps.minecraft = "1.21.4"
+deps.fabric-api = "0.119.3+1.21.4"
+deps.placeholder-api = "2.5.2+1.21.3"
+deps.farbic-permission-api = "0.3.3"
+deps.vanish = "1.5.13+1.21.5"
+
+[fabric."1.21.6"]
+deps.minecraft = "1.21.6"
+deps.fabric-api = "0.119.3+1.21.4"
+publish.additionalVersions = ["1.21.6"]
+
+[fabric."26.1"]
+deps.minecraft = "26.1"
+deps.fabric-api = "0.144.0+26.1"
+deps.placeholder-api = "3.0.0-beta.2+26.1"
+deps.farbic-permission-api = "0.7.0"
+deps.vanish = "1.6.6+26.1"
+publish.additionalVersions = ["26.1.1", "26.1.2"]
+
+[neoforge]
+
+[neoforge."1.21.1"]
+deps.minecraft = "1.21.1"
+deps.neoforge = "21.1.213"
+
+[neoforge."1.21.7"]
+deps.minecraft = "1.21.7"
+deps.neoforge = "21.7.1-beta"
+publish.additionalVersions = ["1.21.6"]
+
+[neoforge."26.1"]
+deps.minecraft = "26.1.2"
+deps.neoforge = "26.1.2.29-beta"
+deps.placeholder-api = "3.0.0+26.1+neoforge"
+publish.additionalVersions = ["26.1.1", "26.1.2"]
