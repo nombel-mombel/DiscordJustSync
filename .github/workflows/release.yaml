@@ -136,7 +136,7 @@ jobs:
         env:
           version: ${{ matrix.version }}
         run: |
-          VERSIONS=$(jq -r --arg version "$version" '.[$version][]' versions.json | jq -r '.[]' | paste -sd '\n' -)
+          VERSIONS=$(jq -r --arg version "$version" '.[$version][]' versions.json)
           echo "MINECRAFT_VERSIONS<<EOF" >> $GITHUB_ENV
           echo "$VERSIONS" >> $GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV

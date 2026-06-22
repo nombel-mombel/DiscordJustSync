@@ -37,4 +37,7 @@ for version in versions:
         version_range.append(v["id"])
     output[version] = version_range
 
-print(json.dumps(output, indent=4))
+with open("versions.json", "w") as file:
+    json.dump(output, file, indent=4)
+
+print(json.dumps(versions))
