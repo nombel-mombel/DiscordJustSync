@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import tronka.justsync.chat.ChatBridge;
 import tronka.justsync.chat.MinecraftToDiscordPreprocessor;
 import tronka.justsync.chat.RichPresenceUpdater;
+import tronka.justsync.compat.BanHammerIntegration;
 import tronka.justsync.compat.FloodgateIntegration;
 import tronka.justsync.compat.LuckPermsIntegration;
 import tronka.justsync.compat.VanishIntegration;
@@ -53,6 +54,7 @@ public class JustSyncApplication extends ListenerAdapter implements DedicatedSer
     private LuckPermsIntegration luckPermsIntegration;
     private VanishIntegration vanishIntegration;
     private FloodgateIntegration floodgateIntegration;
+    private BanHammerIntegration banHammerIntegration;
     private TimeoutManager timeoutManager;
     private DiscordLogger discordLogger;
     private RichPresenceUpdater richPresenceUpdater;
@@ -133,6 +135,7 @@ public class JustSyncApplication extends ListenerAdapter implements DedicatedSer
             this.luckPermsIntegration = new LuckPermsIntegration(this);
             this.vanishIntegration = new VanishIntegration(this);
             this.floodgateIntegration = new FloodgateIntegration(this);
+            this.banHammerIntegration = new BanHammerIntegration();
             this.jda.addEventListener(new DiscordEvents(this));
             this.richPresenceUpdater = new RichPresenceUpdater(this);
             this.minecraftToDiscordPreprocessor = new MinecraftToDiscordPreprocessor(this);
@@ -199,6 +202,10 @@ public class JustSyncApplication extends ListenerAdapter implements DedicatedSer
     }
 
     public FloodgateIntegration getFloodgateIntegration() { return this.floodgateIntegration;}
+
+    public BanHammerIntegration gBanHammerIntegration() {
+        return this.banHammerIntegration;
+    }
 
     public TimeoutManager getTimeoutManager() {
         return this.timeoutManager;

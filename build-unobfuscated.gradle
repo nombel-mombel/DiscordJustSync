@@ -89,6 +89,7 @@ dependencies {
     compileOnly "net.luckperms:api:${property('luckperms_api_version')}"
     compileOnly "org.geysermc.floodgate:api:${property('floodgate_api_version')}"
     compileOnly "maven.modrinth:vanish:${property('vanish_version')}"
+    compileOnly "maven.modrinth:banhammer:${property('banhammer_version')}"
 
     // placeholder-api
     implementation "eu.pb4:placeholder-api:${property('placeholder_api_version')}"
