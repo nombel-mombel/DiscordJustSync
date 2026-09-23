@@ -61,13 +61,22 @@ public class MinecraftToDiscordPreprocessor {
             return;
         }
         DisplayInfo advancement = payload.advancement().display().get();
+        //? if >= 26.3 {
+        /*if (!this.config.announceAdvancements || !advancement.announceToChat()) {
+        *///?} else {
         if (!this.config.announceAdvancements || !advancement.shouldAnnounceChat()) {
+        //?}
             return;
         }
 
         Map<String, String> replacements = Map.of(
+                //? if >= 26.3 {
+                /*"%title%", advancement.title().getString(),
+                "%description%", advancement.description().getString()
+                *///?} else {
                 "%title%", advancement.getTitle().getString(),
                 "%description%", advancement.getDescription().getString()
+                //?}
         );
         this.invokeMessageEvent(replacements, payload.player(), MessageType.ADVANCEMENT);
     }

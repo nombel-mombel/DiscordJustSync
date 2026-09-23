@@ -2,9 +2,7 @@ package tronka.justsync;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.properties.PropertyMap;
-import com.mojang.authlib.yggdrasil.ProfileResult;
 import com.mojang.logging.LogUtils;
 import eu.pb4.placeholders.api.node.TextNode;
 import java.io.BufferedReader;
@@ -112,14 +110,22 @@ public final class Utils {
         if (JustSyncApplication.getInstance().getFloodgateIntegration().isBedrock(uuid)) {
             return JustSyncApplication.getInstance().getFloodgateIntegration().getUsername(uuid);
         }
-        ProfileResult result = JustSyncApplication.getInstance().getServer()
-            //? if >= 1.21.9 {
-            .services()
-            .sessionService()
-            //?} else {
-            /*.getSessionService()
-            *///?}
-            .fetchProfile(uuid, false);
+        //? if >= 26.3 {
+        /*com.mojang.authlib.services.ProfileResult 
+        *///?} else {
+        com.mojang.authlib.yggdrasil.ProfileResult
+        //?}
+            result =
+                JustSyncApplication.getInstance()
+                        .getServer()
+                        //? if >= 1.21.9 {
+                        .services()
+                        .sessionService()
+                        //?} else {
+                        /*.getSessionService()
+                         */
+                        //?}
+                        .fetchProfile(uuid, false);
         if (result == null) {
             return "unknown";
         }

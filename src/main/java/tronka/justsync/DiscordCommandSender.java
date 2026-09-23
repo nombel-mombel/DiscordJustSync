@@ -25,10 +25,13 @@ public class DiscordCommandSender extends CommandSourceStack {
                 //?} else {
                 /*4,
                 *///?}
+                 //? if < 26.3
                 "Discord-JustSync",
                 Component.nullToEmpty("Discord-JustSync"),
-                server,
-                null);
+                server
+                 //? if < 26.3
+                ,null
+                );
         this.feedbackConsumer = feedback;
         this.sender = sender;
     }
