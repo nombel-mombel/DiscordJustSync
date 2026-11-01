@@ -4,6 +4,7 @@ import com.mojang.logging.LogUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -18,10 +19,14 @@ import java.util.stream.Stream;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.internal.utils.PermissionUtil;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.players.UserBanList;
+import net.minecraft.server.players.UserBanListEntry;
+
 import org.slf4j.Logger;
 import tronka.justsync.CompatUtil;
 import tronka.justsync.JustSyncApplication;
@@ -305,15 +310,36 @@ public class LinkManager {
     }
 
 
-    public void onMemberRemoved(Member member) {
-        this.kickAccounts(member, this.integration.getConfig().kickMessages.kickOnLeave);
-        if (this.unlinkPlayer(member.getIdLong())) {
-            LOGGER.info("Removed link of \"{}\" because they left the guild.", member.getEffectiveName());
+    public void onMemberRemoved(User user) {
+        this.kickAccounts(user.getIdLong(), this.integration.getConfig().kickMessages.kickOnLeave);
+        if (this.unlinkPlayer(user.getIdLong())) {
+            LOGGER.info("Removed link of \"{}\" because they left the guild.", user.getEffectiveName());
         }
     }
 
-    public void kickAccounts(Member member, String reason) {
-        Optional<PlayerLink> playerLink = this.integration.getLinkManager().getDataOf(member.getIdLong());
+    public void processMemberRemoval(User user, boolean banned) {
+        this.processMemberRemoval(user, banned, null);
+    }
+
+    public void processMemberRemoval(User user, boolean banned, String reason) {
+        MinecraftServer server = this.integration.getServer();
+        server.execute(
+                () -> {
+                    Optional<PlayerLink> link =
+                            this.getDataOf(user.getIdLong());
+                    if (link.isEmpty()) {
+                        return;
+                    }
+
+                    if (banned) {
+                        this.banAccounts(server, link.get(), reason);
+                    }
+                    this.onMemberRemoved(user);
+                });
+    }
+
+    public void kickAccounts(long memberId, String reason) {
+        Optional<PlayerLink> playerLink = this.getDataOf(memberId);
         if (playerLink.isEmpty()) {
             return;
         }
@@ -332,6 +358,34 @@ public class LinkManager {
         ServerPlayer player = server.getPlayerList().getPlayer(uuid);
         if (player != null) {
             player.connection.disconnect(Component.nullToEmpty(reason));
+        }
+    }
+
+    private void banAccounts(MinecraftServer server, PlayerLink link, String reason) {
+        UserBanList bans = server.getPlayerList().getBans();
+        for (UUID uuid : link.getAllUuids()) {
+            ServerPlayer player = server.getPlayerList().getPlayer(uuid);
+            String name = uuid.toString();
+            try {
+                name = player == null ? Utils.getPlayerName(uuid) : player.getName().getString();
+            } catch (RuntimeException error) {
+                JustSyncApplication.LOGGER.warn(
+                        "Could not resolve name for banned account {}", uuid, error);
+            }
+            CompatUtil.Profile profile = new CompatUtil.Profile(name, uuid);
+
+            String banReason = "Banned through Discord";
+            if (reason != null) {
+                banReason += ": " + reason;
+            }
+
+            bans.add(
+                    new UserBanListEntry(
+                            profile.unwrap(), new Date(), "DiscordJustSync", null, banReason));
+
+            if (player != null) {
+                player.connection.disconnect(Component.literal(banReason));
+            }
         }
     }
 

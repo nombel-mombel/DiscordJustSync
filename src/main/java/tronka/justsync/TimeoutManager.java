@@ -15,7 +15,7 @@ public class TimeoutManager extends ListenerAdapter {
     @Override
     public void onGuildMemberUpdateTimeOut(GuildMemberUpdateTimeOutEvent event) {
         Member member = event.getMember();
-        this.integration.getLinkManager().kickAccounts(member, this.integration.getConfig().kickMessages.kickOnTimeOut);
+        this.integration.getLinkManager().kickAccounts(member.getIdLong(), this.integration.getConfig().kickMessages.kickOnTimeOut);
     }
 }
 

@@ -24,6 +24,7 @@ Then invite it to your discord server with Permissions to:
 - modify webhooks
 - manage nicknames (optional)
 - manage roles (optional)
+- view audit logs (optional, required for `linking.banOnDiscordBan`)
 
 Do that by going to the OAuth2 section's Url Generator, selecting `bot`, then selecting all required permissions or `Administrator`.
 Then copy the link and paste it in your browser and add the bot to your server.
