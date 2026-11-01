@@ -90,6 +90,7 @@ public class JustSyncApplication extends ListenerAdapter implements DedicatedSer
         try {
             this.jda = JDABuilder.createLight(this.config.botToken, GatewayIntent.GUILD_MESSAGES,
                     GatewayIntent.MESSAGE_CONTENT,
+                    GatewayIntent.GUILD_MODERATION,
                     GatewayIntent.GUILD_MEMBERS).setMemberCachePolicy(MemberCachePolicy.ALL).addEventListeners(this)
                 .build();
         } catch (InvalidTokenException e) {

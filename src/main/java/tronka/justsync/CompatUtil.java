@@ -45,5 +45,9 @@ public class CompatUtil {
             /*return new Profile(profile.getName(), profile.getId());
             *///?}
         }
+
+        public /*$ profile_class {*/ net.minecraft.server.players.NameAndId/*$}*/ unwrap() {
+            return new /*$ profile_class {*/ net.minecraft.server.players.NameAndId/*$}*/(this.id, this.name);
+        }
     }
 }

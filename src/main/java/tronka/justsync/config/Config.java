@@ -97,6 +97,9 @@ public class Config {
         public boolean enableLinking = true;
         @TomlComment("Automatically unlink players when they leave the Discord server")
         public boolean unlinkOnLeave = true;
+        @TomlComment({"Ban all linked Minecraft accounts (including alts) when the Discord account is banned",
+            "Requires the bot to have the Ban Members permission"})
+        public boolean banOnDiscordBan = false;
         @TomlComment("Log account linking and unlinking events to a Discord channel")
         public boolean logLinking = false;
         @TomlComment("Discord channel ID for logging linking events (only used if logLinking is true)")
