@@ -312,6 +312,11 @@ public class LinkManager {
 
     public void onMemberRemoved(User user) {
         this.kickAccounts(user.getIdLong(), this.integration.getConfig().kickMessages.kickOnLeave);
+
+        if (!this.integration.getConfig().linking.unlinkOnLeave) {
+            return;
+        }
+
         if (this.unlinkPlayer(user.getIdLong())) {
             LOGGER.info("Removed link of \"{}\" because they left the guild.", user.getEffectiveName());
         }
